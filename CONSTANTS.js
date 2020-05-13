@@ -9,6 +9,10 @@ export const COLORS = {
     blueCuracao: '#3dc1d3',
     pencilLead: '#596275',
     rosyHightlight: '#f7d794',
+    brewedMustard: '#e77f67',
+    softBlue: '#778beb',
+    purpleMountainMajesty: '#786fa6',
+    appleValley: '#ea8685',
 }
 
 export const MY_KEY = 'apiKey=sKw_oqVSmdk0cj8XolfkSyap__JKRPLt';
@@ -18,6 +22,13 @@ export const CARD_WIDTH = width/1.6;
 export const CARD_HEIGHT = height/2;
 export const MAX_TRACK = CARD_WIDTH/2;
 
-export const IMAGES = [
-    require('./assets/icon.png')
-];
+export const LISTINGS = [
+    {
+      id: "o zdravii",
+      picture: require("./assets/icon.png"),
+    },
+    {
+      id: "o upokoenii",
+      picture: require("./assets/icon.png"),
+    },
+  ];

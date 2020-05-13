@@ -2,14 +2,10 @@ import React from 'react'
 import { View, Text, StyleSheet, Dimensions, Image, TouchableOpacity } from 'react-native'
 import { PanGestureHandler, State } from 'react-native-gesture-handler'
 import Animated, { Value, useCode, block, cond, eq, set, and, greaterOrEq, lessOrEq, Easing, or } from 'react-native-reanimated'
-import { COLORS, CARD_HEIGHT, CARD_WIDTH, MAX_TRACK, IMAGES } from '../CONSTANTS'
+import { COLORS, CARD_HEIGHT, CARD_WIDTH, MAX_TRACK, LISTINGS } from '../CONSTANTS'
 import { mix, panGestureHandler, timing } from 'react-native-redash'
 import { SharedElement } from 'react-navigation-shared-element';
 const { width, height } = Dimensions.get('window')
-
-const listing = {
-    id: 1
-}
 
 const styles = StyleSheet.create({
     container: {
@@ -32,7 +28,7 @@ const styles = StyleSheet.create({
     }
 })
 
-const OZdraviiCard = ({ navigation, oZdraviiActive, oUpokoeniiActive, oZdraviiTransition }) => {
+const OZdraviiCard = ({ oZdraviiList, navigation, oZdraviiActive, oUpokoeniiActive, oZdraviiTransition }) => {
     const scale = mix(oZdraviiTransition, 1, .85);
     const top = mix(oZdraviiTransition, 0, 40);
     const opacity = mix(oZdraviiTransition, 1, .2);
@@ -105,16 +101,29 @@ const OZdraviiCard = ({ navigation, oZdraviiActive, oUpokoeniiActive, oZdraviiTr
                         justifyContent: 'center',
                         alignItems: 'center',
                     }}
-                    onPress={() => navigation.navigate('Card', { listing })}>
+                    onPress={() => navigation.navigate('Card', { listing: LISTINGS[0], names: oZdraviiList, title: 'о здравии' })}>
                     <View style={{
-                        width: CARD_WIDTH/1.5,
-                        height: CARD_WIDTH/1.5   
+                        width: CARD_WIDTH/2,
+                        height: CARD_WIDTH/2,
+                        marginBottom: 40,   
                         }}>
-                        <SharedElement id={listing.id}>
-                            <Image source={ IMAGES[0] } resizeMode='cover' style={{ ...StyleSheet.absoluteFillObject, height: 100, width: 100 }} />
+                        <SharedElement id={LISTINGS[0].id}>
+                            <Image source={ LISTINGS[0].picture } resizeMode='cover' style={{ ...StyleSheet.absoluteFillObject, height: CARD_WIDTH/2, width: CARD_WIDTH/2 }} />
                         </SharedElement>
                     </View>
-                    <Text>о здравии</Text>
+                    <Text style={{
+                        color: COLORS.blueCuracao,
+                        fontWeight: '600',
+                        fontSize: 20,
+                        marginBottom: 4,
+                    }}>о здравии</Text>
+                    <Text style={{
+                        color: COLORS.blueCuracao,
+                        fontWeight: '100',
+                        fontSize: 14
+                    }}>{ oZdraviiList.reduce((arr, g) => {
+                        return arr + g.data.length
+                    }, 0)} имен</Text>
                 </TouchableOpacity>
             </Animated.View>
         </PanGestureHandler>
