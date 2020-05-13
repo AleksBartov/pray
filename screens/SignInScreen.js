@@ -1,8 +1,9 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TextInput, ActivityIndicator, TouchableOpacity, Modal } from 'react-native';
-import { Transition, Transitioning } from 'react-native-reanimated';
+import { Transition, Transitioning, cond, eq, neq } from 'react-native-reanimated';
 import { COLORS, MY_COLLECTION, MY_KEY } from '../CONSTANTS';
 import { greatData } from '../helpers/GreatData';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 
 const styles = StyleSheet.create({
@@ -11,6 +12,12 @@ const styles = StyleSheet.create({
       backgroundColor: COLORS.biscay,
       alignItems: 'center',
       justifyContent: 'center',
+    },
+    title: {
+      color: COLORS.blueCuracao,
+      fontWeight: '600',
+      fontSize: 28,
+      marginBottom: 30,
     },
     modalContainer: {
       flex: 1,
@@ -26,15 +33,29 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
       borderRadius: 8,
     },
-    input: {
-      width: 200,
+    inputBox: {
+      width: 260,
       height: 60,
+      paddingHorizontal: 10,
       margin: 6,
       borderRadius: 8,
       borderWidth: 1,
       borderColor: COLORS.cornflower,
+      alignItems: 'center',
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      overflow: 'hidden',
+    },
+    input: {
       color: COLORS.blueCuracao,
       fontSize: 18,
+      width: 180,
+    },
+    delBtnBox: {
+      width: 60,
+      height: 60,
+      alignItems: 'flex-end',
+      justifyContent: 'center',
     },
     button: {
       width: 140,
@@ -71,19 +92,34 @@ const SignInScreen = ({ navigation }) => {
             .then(data => data.json())
             .then(users => {
                 const isSigned = users.find(u=>(u.username === username) && (u.password === password));
-                isSigned ?  greatData({ username, navigation }) : setWrongInputsModal(true);
+                isSigned ?  greatData({ username, navigation, setBtnPressed, setUsername, setPassword }) : setWrongInputsModal(true);
             })
             .catch(err=>alert(err));
     }
+
     return (
         <Transitioning.View
         ref={ref}
         transition={trsn}
         style={{ flex: 1, backgroundColor: COLORS.biscay }}>
         <View style={ styles.container }>
-          <Text>ВХОД</Text>
-          <TextInput style={styles.input} placeholder='ваше имя' value={username} onChangeText={setUsername} />
-          <TextInput style={styles.input} placeholder='пароль' value={password} onChangeText={setPassword} secureTextEntry={true} />
+          <Text style={styles.title}>ВХОД</Text>
+          <View style={styles.inputBox}>
+            <TextInput style={styles.input} placeholder='ваше имя' value={username} onChangeText={setUsername} />
+            <TouchableOpacity onPress={() => setUsername(null)} >
+              <View style={[styles.delBtnBox, { opacity: username ? 1 : 0 } ]}>
+                <MaterialCommunityIcons name="close-circle" size={24} color={COLORS.pencilLead} />
+              </View>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.inputBox}>
+            <TextInput style={styles.input} placeholder='пароль' value={password} onChangeText={setPassword} secureTextEntry={true} />
+            <TouchableOpacity onPress={() => setPassword(null)} >
+              <View style={[styles.delBtnBox, { opacity: password ? 1 : 0 } ]}>
+                <MaterialCommunityIcons name="close-circle" size={24} color={COLORS.pencilLead} />
+              </View>
+            </TouchableOpacity>
+          </View>
           <TouchableOpacity
             onPress={() => {
               ref.current.animateNextTransition();

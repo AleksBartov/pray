@@ -1,6 +1,6 @@
 import { MY_KEY } from "../CONSTANTS";
 
-export const greatData = async ( { username, navigation } ) => {
+export const greatData = async ( { username, navigation, setBtnPressed, setUsername, setPassword } ) => {
 
         fetch(`https://api.mlab.com/api/1/databases/sinodik/collections/${username}?${MY_KEY}`)
         .then(data => data.json())
@@ -44,7 +44,9 @@ export const greatData = async ( { username, navigation } ) => {
         }, []);
 
         let toHomeData = [ username, structuredArray];
-
+        setBtnPressed(false);
+        setUsername(null);
+        setPassword(null);
         navigation.navigate('Home', { toHomeData });
     });
 }
