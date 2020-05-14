@@ -1,4 +1,5 @@
 import { Dimensions } from "react-native";
+import { Value } from "react-native-reanimated";
 
 const { width, height } = Dimensions.get('window')
 
@@ -32,3 +33,6 @@ export const LISTINGS = [
       picture: require("./assets/icon.png"),
     },
   ];
+
+export const CARD_GROUP_WIDTH = new Value(100);
+export const CARD_GROUP_MARGIN = new Value(6);

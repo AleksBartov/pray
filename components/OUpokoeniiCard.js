@@ -5,6 +5,7 @@ import Animated, { Value, cond, and, eq, useCode, block, greaterOrEq, lessOrEq, 
 import { COLORS, CARD_WIDTH, CARD_HEIGHT, MAX_TRACK, LISTINGS } from '../CONSTANTS'
 import { mix, panGestureHandler, timing } from 'react-native-redash';
 import { SharedElement } from 'react-navigation-shared-element';
+import { checkCount } from '../helpers/checkCount'
 const { width, height } = Dimensions.get('window')
 
 const styles = StyleSheet.create({
@@ -29,6 +30,10 @@ const styles = StyleSheet.create({
 })
 
 const OUpokoeniiCard = ({ oUpokoeniiList, navigation, oZdraviiActive, oUpokoeniiActive, oUpokoeniiTransition }) => {
+    const count = oUpokoeniiList.reduce((arr, g) => {
+        return arr + g.data.length
+    }, 0);
+    const rightSpel = checkCount(count);
     const scale = mix(oUpokoeniiTransition, .85, 1);
     const top = mix(oUpokoeniiTransition, 40, 0);
     const opacity = mix(oUpokoeniiTransition, .2, 1);
@@ -125,9 +130,7 @@ const OUpokoeniiCard = ({ oUpokoeniiList, navigation, oZdraviiActive, oUpokoenii
                         color: COLORS.blueCuracao,
                         fontWeight: '100',
                         fontSize: 14
-                    }}>{ oUpokoeniiList.reduce((arr, g) => {
-                        return arr + g.data.length
-                    }, 0)} имен</Text>
+                    }}>{ count } { rightSpel }</Text>
                 </TouchableOpacity>
             </Animated.View>
         </PanGestureHandler>
