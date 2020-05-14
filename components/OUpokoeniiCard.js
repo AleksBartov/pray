@@ -33,7 +33,13 @@ const OUpokoeniiCard = ({ oUpokoeniiList, navigation, oZdraviiActive, oUpokoenii
     const count = oUpokoeniiList.reduce((arr, g) => {
         return arr + g.data.length
     }, 0);
+    const commonActiv = new Value(0);
     const rightSpel = checkCount(count);
+    const groups = oUpokoeniiList
+                    .map( data => data.title )
+                    .reduce((arr, title, index) => {
+                        return [...arr, { ID: new Value(index), title, activTab: commonActiv }]
+                    }, []);
     const scale = mix(oUpokoeniiTransition, .85, 1);
     const top = mix(oUpokoeniiTransition, 40, 0);
     const opacity = mix(oUpokoeniiTransition, .2, 1);
@@ -110,7 +116,19 @@ const OUpokoeniiCard = ({ oUpokoeniiList, navigation, oZdraviiActive, oUpokoenii
                         justifyContent: 'center',
                         alignItems: 'center',
                     }}
-                    onPress={() => navigation.navigate('Card', { listing: LISTINGS[1], names: oUpokoeniiList, title: 'о упокоении' })}>
+                    onPress={
+                        () => navigation
+                            .navigate(
+                                'Card',
+                                { 
+                                    listing: LISTINGS[1],
+                                    names: oUpokoeniiList,
+                                    title: 'о упокоении',
+                                    commonActiv,
+                                    groups
+                                }
+                            )
+                        }>
                     <View style={{
                         width: CARD_WIDTH/2,
                         height: CARD_WIDTH/2,

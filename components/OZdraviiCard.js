@@ -33,6 +33,12 @@ const OZdraviiCard = ({ oZdraviiList, navigation, oZdraviiActive, oUpokoeniiActi
     const count = oZdraviiList.reduce((arr, g) => {
         return arr + g.data.length
     }, 0);
+    const commonActiv = new Value(0);
+    const groups = oZdraviiList
+                    .map( data => data.title )
+                    .reduce((arr, title, index) => {
+                        return [...arr, { ID: new Value(index), title, activTab: commonActiv }]
+                    }, []);
     const rightSpel = checkCount(count);
     const scale = mix(oZdraviiTransition, 1, .85);
     const top = mix(oZdraviiTransition, 0, 40);
@@ -106,7 +112,19 @@ const OZdraviiCard = ({ oZdraviiList, navigation, oZdraviiActive, oUpokoeniiActi
                         justifyContent: 'center',
                         alignItems: 'center',
                     }}
-                    onPress={() => navigation.navigate('Card', { listing: LISTINGS[0], names: oZdraviiList, title: 'о здравии' })}>
+                    onPress={
+                        () => navigation
+                            .navigate(
+                                'Card',
+                                { 
+                                    listing: LISTINGS[0],
+                                    names: oZdraviiList,
+                                    title: 'о здравии',
+                                    commonActiv,
+                                    groups
+                                }
+                            )
+                        }>
                     <View style={{
                         width: CARD_WIDTH/2,
                         height: CARD_WIDTH/2,

@@ -36,3 +36,6 @@ export const LISTINGS = [
 
 export const CARD_GROUP_WIDTH = new Value(100);
 export const CARD_GROUP_MARGIN = new Value(6);
+
+export const HEADER_HEIGHT = 300;
+export const MIN_HEADER_HEIGHT = 150;

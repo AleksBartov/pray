@@ -5,13 +5,24 @@ import { State, TapGestureHandler } from 'react-native-gesture-handler';
 import { onGestureEvent, timing, mix, withTransition } from 'react-native-redash';
 import { CARD_GROUP_WIDTH, CARD_GROUP_MARGIN, COLORS } from '../CONSTANTS';
 
-const GroupForHeader = ({ groups, i }) => {
+const GroupForHeader = ({ groups, ID, commonActiv, setCommonActive, index }) => {
 
     const state = new Value(State.UNDETERMINED);
     const gestureHandler = onGestureEvent({ state });
-    const active = cond(eq(state, State.END), 1, 0);
+    const active = cond(
+        eq(ID, commonActiv),
+        1,
+        0
+    );
     const transition = withTransition(active)
     const opacity = mix(transition, 0.4, 1);
+
+    useCode(() => block([
+        cond(
+            eq(state, State.END),
+            call([ID], () => setCommonActive())
+        )
+    ]), [])
     
     return (
         <TapGestureHandler {...gestureHandler}>
@@ -31,7 +42,7 @@ const GroupForHeader = ({ groups, i }) => {
                 }}>
                 <Animated.Text style={{
                     color: COLORS.softBlue,
-                }}>{ groups[i].title }</Animated.Text>
+                }}>{ groups[index].title }</Animated.Text>
             </Animated.View>
         </TapGestureHandler>
     )
