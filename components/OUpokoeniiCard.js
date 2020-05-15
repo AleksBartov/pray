@@ -141,8 +141,8 @@ const OUpokoeniiCard = ({ oUpokoeniiList, navigation, oZdraviiActive, oUpokoenii
                     <Text style={{
                         color: COLORS.blueCuracao,
                         fontWeight: '600',
-                        fontSize: 20,
-                        marginBottom: 4,
+                        fontSize: 26,
+                        marginBottom: 12,
                     }}>о упокоении</Text>
                     <Text style={{
                         color: COLORS.blueCuracao,

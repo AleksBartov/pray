@@ -126,19 +126,19 @@ const OZdraviiCard = ({ oZdraviiList, navigation, oZdraviiActive, oUpokoeniiActi
                             )
                         }>
                     <View style={{
-                        width: CARD_WIDTH/2,
-                        height: CARD_WIDTH/2,
+                        width: CARD_WIDTH/1.618,
+                        height: CARD_WIDTH/1.618,
                         marginBottom: 40,   
                         }}>
                         <SharedElement id={LISTINGS[0].id}>
-                            <Image source={ LISTINGS[0].picture } resizeMode='cover' style={{ ...StyleSheet.absoluteFillObject, height: CARD_WIDTH/2, width: CARD_WIDTH/2 }} />
+                            <Image source={ LISTINGS[0].picture } resizeMode='cover' style={{ ...StyleSheet.absoluteFillObject, height: CARD_WIDTH/1.618, width: CARD_WIDTH/1.618 }} />
                         </SharedElement>
                     </View>
                     <Text style={{
                         color: COLORS.blueCuracao,
                         fontWeight: '600',
-                        fontSize: 20,
-                        marginBottom: 4,
+                        fontSize: 26,
+                        marginBottom: 12,
                     }}>о здравии</Text>
                     <Text style={{
                         color: COLORS.blueCuracao,

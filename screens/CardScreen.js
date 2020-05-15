@@ -40,14 +40,14 @@ const CardScreen = () => {
         outputRange: [ HEADER_HEIGHT, MIN_HEADER_HEIGHT ],
         extrapolate: Extrapolate.CLAMP
     });
-    const crossTopAnimMargin = interpolate(y, {
+    const crossTransY = interpolate(y, {
         inputRange: [ 0, HEADER_HEIGHT - MIN_HEADER_HEIGHT ],
         outputRange: [ 60, 0 ],
         extrapolate: Extrapolate.CLAMP
     });
-    const crossLeftAnimMargin = interpolate(y, {
+    const crossTransX = interpolate(y, {
         inputRange: [ 0, HEADER_HEIGHT - MIN_HEADER_HEIGHT ],
-        outputRange: [ width/2 - 60, width - 100 ],
+        outputRange: [ width/2 - 60, width - 90 ],
         extrapolate: Extrapolate.CLAMP
     });
     const crossScale = interpolate(y, {
@@ -117,10 +117,10 @@ const CardScreen = () => {
                                     height: 120,
                                     width: 120,
                                     position: 'absolute',
-                                    marginTop: crossTopAnimMargin,
-                                    marginLeft: crossLeftAnimMargin,
                                     transform: [
-                                        { scale: crossScale }
+                                        { translateX: crossTransX },
+                                        { translateY: crossTransY },
+                                        { scale: crossScale },
                                     ]
                                     }} />
                         </SharedElement>

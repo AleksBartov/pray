@@ -19,18 +19,18 @@ export const COLORS = {
 export const MY_KEY = 'apiKey=sKw_oqVSmdk0cj8XolfkSyap__JKRPLt';
 export const MY_COLLECTION = 'members';
 
-export const CARD_WIDTH = width/1.6;
-export const CARD_HEIGHT = height/2;
+export const CARD_HEIGHT = height/1.618;
+export const CARD_WIDTH = CARD_HEIGHT/1.618;
 export const MAX_TRACK = CARD_WIDTH/2;
 
 export const LISTINGS = [
     {
       id: "o zdravii",
-      picture: require("./assets/icon.png"),
+      picture: require("./assets/lightRatioIcon.png"),
     },
     {
       id: "o upokoenii",
-      picture: require("./assets/icon.png"),
+      picture: require("./assets/lightRatioIcon.png"),
     },
   ];
 

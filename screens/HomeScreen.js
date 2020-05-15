@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react'
+import React, { useRef, useEffect, useState } from 'react'
 import { View, Text } from 'react-native'
 import { COLORS } from '../CONSTANTS';
 import HomeHeader from '../components/HomeHeader';
@@ -25,14 +25,16 @@ const HomeScreen = ({ navigation }) => {
     const oUpokoeniiActive = new Value(0);
     const oZdraviiTransition = withTransition(oZdraviiActive);
     const oUpokoeniiTransition = withTransition(oUpokoeniiActive);
+    const [ ready, setReady ] = useState(false);
 
     const ref = useRef();
     useEffect(() => {
         ref.current.animateNextTransition();
+        setReady(true);
     }, []);
-    const transition = <Transition.Together>
-      <Transition.In type='fade' durationMs={400} interpolation='easeIn' delayMs={1500} />
-    </Transition.Together>
+    const transition = <Transition.Sequence>
+      <Transition.In type='scale' durationMs={400} interpolation='easeIn' />
+    </Transition.Sequence>
 
     return (
         <Transitioning.View 
@@ -40,8 +42,10 @@ const HomeScreen = ({ navigation }) => {
           transition={transition}
           style={{ flex: 1, backgroundColor: COLORS.biscay, justifyContent: 'center', alignItems: 'center' }}>
           <HomeHeader {...{ username, navigation }} />
-          <OUpokoeniiCard {...{ oUpokoeniiList, navigation, oZdraviiActive, oUpokoeniiActive, oUpokoeniiTransition }} />
-          <OZdraviiCard {...{ oZdraviiList, navigation, oZdraviiActive, oUpokoeniiActive, oZdraviiTransition }} />
+          { ready && <>
+            <OUpokoeniiCard {...{ oUpokoeniiList, navigation, oZdraviiActive, oUpokoeniiActive, oUpokoeniiTransition }} />
+            <OZdraviiCard {...{ oZdraviiList, navigation, oZdraviiActive, oUpokoeniiActive, oZdraviiTransition }} />
+          </>}
         </Transitioning.View>
     )
 }
