@@ -31,18 +31,6 @@ export const greatData = async ( { username, navigation, setBtnPressed, setUsern
             }
             });
 
-        let oZdraviiAll = structuredArray
-        .reduce((result, group ) => {
-            const newData = group.data.filter(p => p.live === 'о здравии');
-            return [...result, { ...group, data: newData }];
-        }, []);
-
-        let oUpokoeniiAll = structuredArray
-        .reduce((result, group ) => {
-            const newData = group.data.filter(p => p.live === 'о упокоении');
-            return [...result, { ...group, data: newData }];
-        }, []);
-
         let toHomeData = [ username, structuredArray];
         setBtnPressed(false);
         setUsername(null);

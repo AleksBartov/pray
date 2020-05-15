@@ -8,6 +8,7 @@ import Animated, { Value, set, interpolate, Extrapolate, useCode, block, greater
 import GroupForHeader from '../components/GroupForHeader';
 import { useValue, onScrollEvent, withTransition, mix } from 'react-native-redash';
 import NamesList from '../components/NamesList';
+import { transformName } from '../helpers/transformName';
 
 const { width } = Dimensions.get('window');
 
@@ -72,6 +73,13 @@ const CardScreen = () => {
     const { goBack, getParam } = useNavigation();
     const listing = getParam('listing');
     const names = getParam('names');
+    const namesToPray = names.reduce((arr, obj, i) => {
+        const newArrData = obj.data.reduce((newPerson, person) => {
+            const transformedName = transformName(person.name);
+            return [...newPerson, {...person, name: transformedName }]
+        }, []);
+        return [...arr, { ...obj, data: newArrData }];
+    }, []);
     const groups = getParam('groups');
     const title = getParam('title');
     // const commonActiv = getParam('commonActiv');
@@ -156,7 +164,7 @@ const CardScreen = () => {
                     scrollEventThrottle={1}
                     {...{ onScroll }}
                 >
-                    <NamesList {...{ y }} />
+                    <NamesList names={ namesToPray } {...{ y }} />
             </Animated.ScrollView>
             </View>
         </View>

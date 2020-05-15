@@ -12,11 +12,13 @@ const HomeScreen = ({ navigation }) => {
     const oZdraviiList = structuredArray
     .reduce((result, group ) => {
         const newData = group.data.filter(p => p.live === 'о здравии');
+        if(newData.length === 0) return result;
         return [...result, { ...group, data: newData }];
       }, []);
     const oUpokoeniiList = structuredArray
     .reduce((result, group ) => {
         const newData = group.data.filter(p => p.live === 'о упокоении');
+        if(newData.length === 0) return result;
         return [...result, { ...group, data: newData }];
       }, []);
     const oZdraviiActive = new Value(0);
