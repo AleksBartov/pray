@@ -1,14 +1,17 @@
 import React, { useState, useRef } from 'react'
-import { View, Text, StyleSheet, Dimensions, TouchableWithoutFeedback } from 'react-native'
-import { COLORS, HEADER_HEIGHT, MIN_HEADER_HEIGHT, CARD_GROUP_WIDTH, CARD_GROUP_MARGIN } from '../CONSTANTS'
+import { View, Text, StyleSheet, Dimensions, TouchableWithoutFeedback, FlatList, Modal, TouchableOpacity } from 'react-native'
+import { COLORS, HEADER_HEIGHT, MIN_HEADER_HEIGHT } from '../CONSTANTS'
 import { SharedElement } from 'react-navigation-shared-element';
-import { FontAwesome } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from 'react-navigation-hooks';
 import Animated, { Value, set, interpolate, Extrapolate, useCode, block, greaterThan, sub } from 'react-native-reanimated'
-import GroupForHeader from '../components/GroupForHeader';
 import { useValue, onScrollEvent, withTransition, mix } from 'react-native-redash';
 import NamesList from '../components/NamesList';
 import { transformName } from '../helpers/transformName';
+import TabBottomNavigator from '../components/TabBottomNavigator';
+import Settings from '../components/Settings';
+import Play from '../components/Play';
+import Add from '../components/Add';
 
 const { width } = Dimensions.get('window');
 
@@ -31,7 +34,16 @@ const styles = StyleSheet.create({
 
 
 const CardScreen = () => {
+
+    const [ settings, setSettings ] = useState(false);
+    const [ play, setPlay ] = useState(false);
+    const [ add, setAdd ] = useState(false);
+    const [ search, setSearch ] = useState(false);
+
+    const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
     const y = useValue(0);
+
+    const onScroll = onScrollEvent({ y });
     const toggle = new Value(0);
     const animHeight = interpolate(y, {
         inputRange: [ 0, HEADER_HEIGHT - MIN_HEADER_HEIGHT ],
@@ -41,11 +53,6 @@ const CardScreen = () => {
     const crossTransY = interpolate(y, {
         inputRange: [ 0, HEADER_HEIGHT - MIN_HEADER_HEIGHT ],
         outputRange: [ 60, 0 ],
-        extrapolate: Extrapolate.CLAMP
-    });
-    const crossTransX = interpolate(y, {
-        inputRange: [ 0, HEADER_HEIGHT - MIN_HEADER_HEIGHT ],
-        outputRange: [ width/2 - 60, width - 90 ],
         extrapolate: Extrapolate.CLAMP
     });
     const crossScale = interpolate(y, {
@@ -78,6 +85,12 @@ const CardScreen = () => {
         }, []);
         return [...arr, { ...obj, data: newArrData }];
     }, []);
+    const DATA = [
+        {
+            id: 1,
+            data: namesToPray
+        }
+    ];
     const groups = getParam('groups');
     const title = getParam('title');
     // const commonActiv = getParam('commonActiv');
@@ -107,7 +120,22 @@ const CardScreen = () => {
                     <TouchableWithoutFeedback
                         style={{ justifyContent: 'center', alignItems: 'center'}}
                         onPress={() => goBack()}>
-                        <FontAwesome name="close" size={28} color={COLORS.biscay} />
+                        <Ionicons name="md-arrow-round-back" size={28} color={COLORS.biscay} />
+                    </TouchableWithoutFeedback>
+                </View>
+                <View style={{
+                    position: 'absolute',
+                    width: 60,
+                    height: 80,
+                    left: width - 60,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    zIndex: 100,
+                    }}>
+                    <TouchableWithoutFeedback
+                        style={{ justifyContent: 'center', alignItems: 'center'}}
+                        onPress={() => setSearch(true)}>
+                        <Ionicons name="md-search" size={28} color={COLORS.biscay} />
                     </TouchableWithoutFeedback>
                 </View>
             <View style={styles.container}>
@@ -121,7 +149,7 @@ const CardScreen = () => {
                                     width: 120,
                                     position: 'absolute',
                                     transform: [
-                                        { translateX: crossTransX },
+                                        { translateX: width/2 - 60 },
                                         { translateY: crossTransY },
                                         { scale: crossScale },
                                     ]
@@ -144,26 +172,40 @@ const CardScreen = () => {
                             }]
                                 }>{ title }</Text>
                         </Animated.View>
-                        <Animated.ScrollView
-                            showsHorizontalScrollIndicator={false}
-                            horizontal={true}
-                            style={{...StyleSheet.absoluteFillObject, marginTop: groupsScrollMarginTopAnim, opacity }}
-                        >
-                            <Animated.View style={{
-                                flex: 1,
-                                flexDirection: 'row',
-                                marginLeft: groupsTabMarginLeft,
-                            }}>
-                                {
-                                    groups.map((g,i) => {
-                                        return <GroupForHeader key={i} ID={g.ID} index={i} {...{ groups, commonActiv, setCommonActive }} />
-                                    })
-                                }
-                            </Animated.View>
-                        </Animated.ScrollView>
                 </Animated.View>
-                <NamesList names={ namesToPray } {...{ y }} />
+                <AnimatedFlatList
+                    {...{ onScroll }}
+                    scrollEventThrottle={1} 
+                    data={DATA}
+                    renderItem={({ item }) => <NamesList names={ item.data } />}
+                    keyExtractor={item => item.id} />
             </View>
+
+            <TabBottomNavigator {...{ setSettings, setPlay, setAdd }} />
+
+            <Modal
+              animationType="slide"
+              transparent={true}
+              visible={settings}
+              >
+              <Settings {...{ setSettings }} />
+            </Modal>
+
+            <Modal
+              animationType="slide"
+              transparent={true}
+              visible={play}
+              >
+              <Play {...{ setPlay }} />
+            </Modal>
+
+            <Modal
+              animationType="slide"
+              transparent={true}
+              visible={add}
+              >
+              <Add {...{ setAdd }} />
+            </Modal>
         </View>
     )
 }

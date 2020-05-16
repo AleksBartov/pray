@@ -8,24 +8,15 @@ import Item from './Item'
 
 const { width } = Dimensions.get('window')
 
-const NamesList = ({ y, names }) => {
+const NamesList = ({ names }) => {
 
     const AnimatedSectionList = Animated.createAnimatedComponent(SectionList);
 
-    const onScroll = onScrollEvent({ y });
-
-    const marginTop = interpolate(y, {
-        inputRange: [ 0, HEADER_HEIGHT - MIN_HEADER_HEIGHT ],
-        outputRange: [ HEADER_HEIGHT, MIN_HEADER_HEIGHT ],
-        extrapolate: Extrapolate.CLAMP
-    });
     
     return (
-        <Animated.View style={{flex:1, alignItems: 'center', marginTop }}>
+        <Animated.View style={{flex:1, alignItems: 'center', marginTop: HEADER_HEIGHT }}>
             <AnimatedSectionList
-                {...{ onScroll }}
-                scrollEventThrottle={1}
-                stickySectionHeadersEnabled={false}
+                stickySectionHeadersEnabled={true}
                 SectionSeparatorComponent = {() => <View style={{
                     width,
                     height: .5,
