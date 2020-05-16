@@ -31,10 +31,8 @@ const styles = StyleSheet.create({
 
 
 const CardScreen = () => {
-    const scrollView = useRef(null);
     const y = useValue(0);
     const toggle = new Value(0);
-    const onScroll = onScrollEvent({ y });
     const animHeight = interpolate(y, {
         inputRange: [ 0, HEADER_HEIGHT - MIN_HEADER_HEIGHT ],
         outputRange: [ HEADER_HEIGHT, MIN_HEADER_HEIGHT ],
@@ -164,14 +162,7 @@ const CardScreen = () => {
                             </Animated.View>
                         </Animated.ScrollView>
                 </Animated.View>
-                <Animated.ScrollView
-                    ref={scrollView}
-                    style={StyleSheet.absoluteFill}
-                    scrollEventThrottle={1}
-                    {...{ onScroll }}
-                >
-                    <NamesList names={ namesToPray } {...{ y }} />
-            </Animated.ScrollView>
+                <NamesList names={ namesToPray } {...{ y }} />
             </View>
         </View>
     )
