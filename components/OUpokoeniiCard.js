@@ -130,12 +130,12 @@ const OUpokoeniiCard = ({ oUpokoeniiList, navigation, oZdraviiActive, oUpokoenii
                             )
                         }>
                     <View style={{
-                        width: CARD_WIDTH/2,
-                        height: CARD_WIDTH/2,
+                        width: CARD_WIDTH/1.618,
+                        height: CARD_WIDTH/1.618,
                         marginBottom: 40,   
                         }}>
                         <SharedElement id={LISTINGS[1].id}>
-                            <Image source={ LISTINGS[1].picture } resizeMode='cover' style={{ ...StyleSheet.absoluteFillObject, height: CARD_WIDTH/2, width: CARD_WIDTH/2 }} />
+                            <Image source={ LISTINGS[1].picture } resizeMode='cover' style={{ ...StyleSheet.absoluteFillObject, height: CARD_WIDTH/1.618, width: CARD_WIDTH/1.618 }} />
                         </SharedElement>
                     </View>
                     <Text style={{
