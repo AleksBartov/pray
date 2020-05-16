@@ -33,7 +33,7 @@ const HomeScreen = ({ navigation }) => {
         setReady(true);
     }, []);
     const transition = <Transition.Sequence>
-      <Transition.In type='scale' durationMs={400} interpolation='easeIn' />
+      <Transition.In type='scale' durationMs={800} interpolation='easeIn' />
     </Transition.Sequence>
 
     return (

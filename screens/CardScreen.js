@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react'
 import { View, Text, StyleSheet, Dimensions, TouchableWithoutFeedback } from 'react-native'
-import { COLORS, HEADER_HEIGHT, MIN_HEADER_HEIGHT } from '../CONSTANTS'
+import { COLORS, HEADER_HEIGHT, MIN_HEADER_HEIGHT, CARD_GROUP_WIDTH, CARD_GROUP_MARGIN } from '../CONSTANTS'
 import { SharedElement } from 'react-navigation-shared-element';
 import { FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from 'react-navigation-hooks';
@@ -86,7 +86,12 @@ const CardScreen = () => {
     const [ commonActiv, setCommonActive ] = useState(new Value(0));
     const transition = withTransition(toggle);
     const opacity = transition;
-    useCode(() => block([set(toggle, greaterThan(y, sub(HEADER_HEIGHT, MIN_HEADER_HEIGHT)))]), [
+    const groupsTabMarginLeft = new Value(0);
+    useCode(() => block(
+            [
+                set(toggle, greaterThan(y, sub(HEADER_HEIGHT, MIN_HEADER_HEIGHT))),
+            ]
+        ), [
         toggle,
         y,
     ]);
@@ -149,6 +154,7 @@ const CardScreen = () => {
                             <Animated.View style={{
                                 flex: 1,
                                 flexDirection: 'row',
+                                marginLeft: groupsTabMarginLeft,
                             }}>
                                 {
                                     groups.map((g,i) => {

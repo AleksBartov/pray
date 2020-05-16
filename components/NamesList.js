@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef, useEffect } from 'react'
 import { View, Text, StyleSheet, Dimensions } from 'react-native'
 import { COLORS, HEADER_HEIGHT } from '../CONSTANTS'
 import Animated from 'react-native-reanimated'
@@ -49,7 +49,9 @@ const NamesList = ({ y, names }) => {
             {
                 names.map((g,i) => {
                     return (
-                        <View style={styles.groupHolder} key={i}>
+                        <View
+                            style={styles.groupHolder}
+                            key={i}>
                             <View style={styles.groupTitleHolder}>
                                 <Text style={styles.groupTitle}>{g.title}</Text>
                             </View>
