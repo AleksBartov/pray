@@ -1,14 +1,13 @@
 import React from 'react'
-import { View, Text, StyleSheet, Dimensions, SectionList } from 'react-native'
-import { COLORS, HEADER_HEIGHT, MIN_HEADER_HEIGHT } from '../CONSTANTS'
-import Animated, { set, Value, useCode, interpolate, Extrapolate } from 'react-native-reanimated'
-import { onScrollEvent, useValue } from 'react-native-redash'
+import { View, Dimensions, SectionList } from 'react-native'
+import { COLORS, HEADER_HEIGHT } from '../CONSTANTS'
+import Animated from 'react-native-reanimated'
 import SectionHeader from './SectionHeader'
 import Item from './Item'
 
 const { width } = Dimensions.get('window')
 
-const NamesList = ({ names }) => {
+const NamesList = ({ names, y }) => {
 
     const AnimatedSectionList = Animated.createAnimatedComponent(SectionList);
 

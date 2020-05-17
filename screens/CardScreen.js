@@ -1,10 +1,10 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { View, Text, StyleSheet, Dimensions, TouchableWithoutFeedback, FlatList, Modal, TouchableOpacity } from 'react-native'
 import { COLORS, HEADER_HEIGHT, MIN_HEADER_HEIGHT } from '../CONSTANTS'
 import { SharedElement } from 'react-navigation-shared-element';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from 'react-navigation-hooks';
-import Animated, { Value, set, interpolate, Extrapolate, useCode, block, greaterThan, sub } from 'react-native-reanimated'
+import Animated, { Value, set, interpolate, Extrapolate, useCode, block, greaterThan, sub, cond, greaterOrEq, call } from 'react-native-reanimated'
 import { useValue, onScrollEvent, withTransition, mix } from 'react-native-redash';
 import NamesList from '../components/NamesList';
 import { transformName } from '../helpers/transformName';
@@ -97,7 +97,6 @@ const CardScreen = () => {
     const [ commonActiv, setCommonActive ] = useState(new Value(0));
     const transition = withTransition(toggle);
     const opacity = transition;
-    const groupsTabMarginLeft = new Value(0);
     useCode(() => block(
             [
                 set(toggle, greaterThan(y, sub(HEADER_HEIGHT, MIN_HEADER_HEIGHT))),
@@ -138,6 +137,37 @@ const CardScreen = () => {
                         <Ionicons name="md-search" size={28} color={COLORS.biscay} />
                     </TouchableWithoutFeedback>
                 </View>
+                <Animated.ScrollView
+                    horizontal={true}
+                    showsHorizontalScrollIndicator={false}
+                    style={{
+                        ...StyleSheet.absoluteFillObject,
+                        backgroundColor: COLORS.pencilLead,
+                        height: 50,
+                        zIndex: 200,
+                        top: MIN_HEADER_HEIGHT,
+                        opacity,
+                        }}>
+                    <Animated.View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around'}}>
+                        { groups.map((item, i) => {
+                            return <View key={i} style={{ margin: 10,
+                                                borderWidth: 1,
+                                                borderColor: COLORS.biscay,
+                                                borderRadius: 8,
+                                                padding: 5,
+                                                justifyContent: 'center',
+                                                alignItems: 'center'}}>
+                                                    <Text
+                                                style={{ 
+                                                    color: COLORS.biscay,
+                                                    marginHorizontal: 10,
+                                                    fontSize: 14,
+                                                    fontWeight: 'bold'
+                                                }}>{ item.title }</Text>
+                                                </View>
+                        }) }
+                    </Animated.View>
+                </Animated.ScrollView>
             <View style={styles.container}>
                 <Animated.View style={[styles.header, { height: animHeight }]}>
                         <SharedElement id={listing.id}>
@@ -177,7 +207,7 @@ const CardScreen = () => {
                     {...{ onScroll }}
                     scrollEventThrottle={1} 
                     data={DATA}
-                    renderItem={({ item }) => <NamesList names={ item.data } />}
+                    renderItem={({ item }) => <NamesList names={ item.data } {...{ y }} />}
                     keyExtractor={item => item.id} />
             </View>
 

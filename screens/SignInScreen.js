@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { StyleSheet, Text, View, TextInput, ActivityIndicator, TouchableOpacity, Modal } from 'react-native';
+import { StyleSheet, Text, View, TextInput, ActivityIndicator, TouchableOpacity, Modal, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { Transition, Transitioning, cond, eq, neq } from 'react-native-reanimated';
 import { COLORS, MY_COLLECTION, MY_KEY } from '../CONSTANTS';
 import { greatData } from '../helpers/GreatData';
@@ -98,6 +98,11 @@ const SignInScreen = ({ navigation }) => {
     }
 
     return (
+    <KeyboardAvoidingView
+      behavior={Platform.OS == "ios" ? "padding" : "height"}
+      style={styles.container}
+      >
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <Transitioning.View
         ref={ref}
         transition={trsn}
@@ -124,6 +129,7 @@ const SignInScreen = ({ navigation }) => {
             onPress={() => {
               ref.current.animateNextTransition();
               setBtnPressed(true);
+              Keyboard.dismiss();
               donwloadingData({ username, password });
             }}>
             <View style={styles.button}>
@@ -154,6 +160,8 @@ const SignInScreen = ({ navigation }) => {
           </View>
         </Modal>
       </Transitioning.View>
+    </TouchableWithoutFeedback>
+  </KeyboardAvoidingView>
     )
 }
 
