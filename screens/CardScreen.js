@@ -1,19 +1,21 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { View, Text, StyleSheet, Dimensions, TouchableWithoutFeedback, FlatList, Modal, TouchableOpacity } from 'react-native'
-import { COLORS, HEADER_HEIGHT, MIN_HEADER_HEIGHT } from '../CONSTANTS'
+import { COLORS, HEADER_HEIGHT, MIN_HEADER_HEIGHT, GROUP_CARD_WIDTH, GROUP_CARD_MARGIN } from '../CONSTANTS'
 import { SharedElement } from 'react-navigation-shared-element';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from 'react-navigation-hooks';
-import Animated, { Value, set, interpolate, Extrapolate, useCode, block, greaterThan, sub, cond, greaterOrEq, call } from 'react-native-reanimated'
-import { useValue, onScrollEvent, withTransition, mix } from 'react-native-redash';
+import Animated, { Value, set, interpolate, Extrapolate, useCode, block, greaterThan, sub } from 'react-native-reanimated'
+import { useValue, onScrollEvent, withTransition, panGestureHandler, withDecay, diffClamp } from 'react-native-redash';
 import NamesList from '../components/NamesList';
 import { transformName } from '../helpers/transformName';
 import TabBottomNavigator from '../components/TabBottomNavigator';
 import Settings from '../components/Settings';
 import Play from '../components/Play';
 import Add from '../components/Add';
+import { PanGestureHandler } from 'react-native-gesture-handler';
+import Search from '../components/Search';
 
-const { width } = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
     container: {
@@ -39,6 +41,8 @@ const CardScreen = () => {
     const [ play, setPlay ] = useState(false);
     const [ add, setAdd ] = useState(false);
     const [ search, setSearch ] = useState(false);
+
+    const [ containerWidth, setContainerWidth ] = useState(height);
 
     const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
     const y = useValue(0);
@@ -105,7 +109,13 @@ const CardScreen = () => {
         toggle,
         y,
     ]);
-    
+
+    const { state, translation, gestureHandler, velocity } = panGestureHandler();
+    const translateX = withDecay({
+        value: translation.x,
+        velocity: velocity.x,
+        state
+    });
     return (
         <View style={{flex:1, backgroundColor: COLORS.pencilLead}}>
                 <View style={{
@@ -137,21 +147,36 @@ const CardScreen = () => {
                         <Ionicons name="md-search" size={28} color={COLORS.biscay} />
                     </TouchableWithoutFeedback>
                 </View>
-                <Animated.ScrollView
-                    horizontal={true}
-                    showsHorizontalScrollIndicator={false}
-                    style={{
-                        ...StyleSheet.absoluteFillObject,
-                        backgroundColor: COLORS.pencilLead,
-                        height: 50,
-                        zIndex: 200,
-                        top: MIN_HEADER_HEIGHT,
-                        opacity,
-                        }}>
-                    <Animated.View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around'}}>
+                <PanGestureHandler
+                    {...gestureHandler} >
+                    <Animated.View  style={{ ...StyleSheet.absoluteFillObject,
+                                            width,
+                                            top: MIN_HEADER_HEIGHT,
+                                            height: 40,
+                                            zIndex: 200,
+                                            opacity,
+                                            backgroundColor: COLORS.pencilLead,
+                                            flexDirection: 'row',
+                                            alignItems: 'center',
+                                            justifyContent: 'center'}}
+                                        >
+                    <Animated.View style={{ ...StyleSheet.absoluteFillObject,
+                                            height: 40,
+                                            zIndex: 200,
+                                            marginLeft: width/2 - (GROUP_CARD_WIDTH/2) - GROUP_CARD_MARGIN,
+                                            opacity,
+                                            transform: [
+                                                { translateX }
+                                            ],
+                                            width: groups.length * ( GROUP_CARD_WIDTH + ( GROUP_CARD_MARGIN * 2 ) ),
+                                            backgroundColor: COLORS.pencilLead,
+                                            flexDirection: 'row',
+                                            alignItems: 'center',
+                                            justifyContent: 'space-around'}}>
                         { groups.map((item, i) => {
-                            return <View key={i} style={{ margin: 10,
+                            return <View key={i} style={{ marginHorizontal: GROUP_CARD_MARGIN,
                                                 borderWidth: 1,
+                                                width: GROUP_CARD_WIDTH,
                                                 borderColor: COLORS.biscay,
                                                 borderRadius: 8,
                                                 padding: 5,
@@ -167,7 +192,8 @@ const CardScreen = () => {
                                                 </View>
                         }) }
                     </Animated.View>
-                </Animated.ScrollView>
+                    </Animated.View>
+                </PanGestureHandler>
             <View style={styles.container}>
                 <Animated.View style={[styles.header, { height: animHeight }]}>
                         <SharedElement id={listing.id}>
@@ -218,7 +244,7 @@ const CardScreen = () => {
               transparent={true}
               visible={settings}
               >
-              <Settings {...{ setSettings }} />
+              <Settings {...{ setSettings, groups }} />
             </Modal>
 
             <Modal
@@ -226,7 +252,7 @@ const CardScreen = () => {
               transparent={true}
               visible={play}
               >
-              <Play {...{ setPlay }} />
+              <Play {...{ setPlay, namesToPray }} />
             </Modal>
 
             <Modal
@@ -235,6 +261,14 @@ const CardScreen = () => {
               visible={add}
               >
               <Add {...{ setAdd }} />
+            </Modal>
+
+            <Modal
+              animationType="slide"
+              transparent={true}
+              visible={search}
+              >
+              <Search {...{ setSearch }} />
             </Modal>
         </View>
     )
@@ -246,3 +280,11 @@ CardScreen.sharedElements = navigation => {
   };
 
 export default CardScreen
+
+
+
+/* const translateX = diffClamp(withDecay({
+        value: translation.x,
+        velocity: velocity.x,
+        state
+    }), ((GROUP_CARD_WIDTH + ( GROUP_CARD_MARGIN *2 )) * groups.length) + width, 0); */

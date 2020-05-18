@@ -83,7 +83,7 @@ const SignInScreen = ({ navigation }) => {
         ref.current.animateNextTransition();
     }, []);
     const trsn = <Transition.Sequence>
-        <Transition.In type='scale' durationMs={600} interpolation='easeIn' delayMs={400} />
+        <Transition.In type='scale' durationMs={600} interpolation='easeIn' delayMs={400} propagation='bottom' />
         <Transition.Out type='scale' durationMs={100} interpolation='easeOut' />
     </Transition.Sequence>
 
