@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Dimensions, StyleSheet, View, TouchableOpacity, Text } from "react-native";
+import { Dimensions, StyleSheet, TouchableOpacity, Text } from "react-native";
 
 import Animated, {
   Extrapolate,
@@ -16,20 +16,23 @@ import {
 import { COLORS } from "../CONSTANTS";
 
 const CARD_HEIGHT = 80;
+const CARD_WIDTH = 150;
 
 const { height, width } = Dimensions.get("window");
 const MARGIN = 5;
 const HEIGHT = CARD_HEIGHT + MARGIN * 2;
+const WIDTH = CARD_WIDTH + MARGIN * 2;
 
 const styles = StyleSheet.create({
   container: {
     ...StyleSheet.absoluteFillObject,
     alignItems: "center",
     backgroundColor: COLORS.softBlue,
+    flexDirection: 'row',
   },
   card: {
     marginVertical: MARGIN,
-    width: width - 30,
+    width: WIDTH,
     height: CARD_HEIGHT,
     justifyContent: 'center',
     alignItems: 'center',
@@ -40,23 +43,23 @@ const styles = StyleSheet.create({
 
 const Play = ({ setPlay, namesToPray }) => {
   const cards = namesToPray.reduce((arr, { title, data }, i) => {
-    return [...arr, ...data];
+    return [...arr, title];
   }, []);
-  const [containerHeight, setContainerHeight] = useState(height);
-  const visibleCards = Math.floor(containerHeight / HEIGHT);
+  const [containerHeight, setContainerHeight] = useState(width);
+  const visibleCards = Math.floor(containerHeight / WIDTH);
   const {
     gestureHandler,
     translation,
     velocity,
     state,
   } = usePanGestureHandler();
-  const y = diffClamp(
+  const x = diffClamp(
     withDecay({
-      value: translation.y,
-      velocity: velocity.y,
+      value: translation.x,
+      velocity: velocity.x,
       state,
     }),
-    -HEIGHT * cards.length + visibleCards * HEIGHT,
+    -WIDTH * cards.length + visibleCards * WIDTH,
     0
   );
   return (
@@ -65,38 +68,38 @@ const Play = ({ setPlay, namesToPray }) => {
         style={styles.container}
         onLayout={({
           nativeEvent: {
-            layout: { height: h },
+            layout: { width: w },
           },
-        }) => setContainerHeight(h)}
+        }) => setContainerHeight(w)}
       >
           <TouchableOpacity style={{...StyleSheet.absoluteFillObject, top: 20, left: 20, zIndex: 100, width: 70, height: 70}} onPress={() => setPlay(false)}>
             <Text style={{ fontSize: 34, color: COLORS.tigerlily, fontWeight: 'bold' }}>X</Text>
           </TouchableOpacity>
-        {cards.map(({ name }, index) => {
-          const positionY = add(y, index * HEIGHT);
-          const isDisappearing = -HEIGHT;
+        {cards.map((name, index) => {
+          const positionX = add(x, index * WIDTH);
+          const isDisappearing = -WIDTH;
           const isTop = 100;
-          const isBottom = (HEIGHT * (visibleCards - 1)) - 50;
-          const isAppearing = HEIGHT * visibleCards;
-          const translateYWithScale = interpolate(positionY, {
+          const isBottom = (WIDTH * (visibleCards - 1)) - 50;
+          const isAppearing = WIDTH * visibleCards;
+          const translateXWithScale = interpolate(positionX, {
             inputRange: [isBottom, isAppearing],
-            outputRange: [0, -HEIGHT / 4],
+            outputRange: [0, -WIDTH / 4],
             extrapolate: Extrapolate.CLAMP,
           });
-          const translateY = add(
-            interpolate(y, {
-              inputRange: [-HEIGHT * index, 0],
-              outputRange: [-HEIGHT * index, 0],
+          const translateX = add(
+            interpolate(x, {
+              inputRange: [-WIDTH * index, 0],
+              outputRange: [-WIDTH * index, 0],
               extrapolate: Extrapolate.CLAMP,
             }),
-            translateYWithScale
+            translateXWithScale
           );
-          const scale = interpolate(positionY, {
+          const scale = interpolate(positionX, {
             inputRange: [isDisappearing, isTop, isBottom, isAppearing],
             outputRange: [0.5, 1, 1, 0.5],
             extrapolate: Extrapolate.CLAMP,
           });
-          const opacity = interpolate(positionY, {
+          const opacity = interpolate(positionX, {
             inputRange: [isDisappearing, isTop, isBottom, isAppearing],
             outputRange: [0, 1, 1, 0],
             extrapolate: Extrapolate.CLAMP,
@@ -105,7 +108,7 @@ const Play = ({ setPlay, namesToPray }) => {
             <Animated.View
               style={[
                 styles.card,
-                { opacity, transform: [{ translateY }, { scale }] },
+                { opacity, transform: [{ translateX }, { scale }] },
               ]}
               key={index}
             >
