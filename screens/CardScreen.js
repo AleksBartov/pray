@@ -14,6 +14,7 @@ import Play from '../components/Play';
 import Add from '../components/Add';
 import { PanGestureHandler } from 'react-native-gesture-handler';
 import Search from '../components/Search';
+import GroupsInHeader from '../components/GroupsInHeader';
 
 const { width, height } = Dimensions.get('window');
 
@@ -97,7 +98,6 @@ const CardScreen = () => {
     ];
     const groups = getParam('groups');
     const title = getParam('title');
-    // const commonActiv = getParam('commonActiv');
     const [ commonActiv, setCommonActive ] = useState(new Value(0));
     const transition = withTransition(toggle);
     const opacity = transition;
@@ -110,12 +110,6 @@ const CardScreen = () => {
         y,
     ]);
 
-    const { state, translation, gestureHandler, velocity } = panGestureHandler();
-    const translateX = withDecay({
-        value: translation.x,
-        velocity: velocity.x,
-        state
-    });
     return (
         <View style={{flex:1, backgroundColor: COLORS.pencilLead}}>
                 <View style={{
@@ -147,53 +141,7 @@ const CardScreen = () => {
                         <Ionicons name="md-search" size={28} color={COLORS.biscay} />
                     </TouchableWithoutFeedback>
                 </View>
-                <PanGestureHandler
-                    {...gestureHandler} >
-                    <Animated.View  style={{ ...StyleSheet.absoluteFillObject,
-                                            width,
-                                            top: MIN_HEADER_HEIGHT,
-                                            height: 40,
-                                            zIndex: 200,
-                                            opacity,
-                                            backgroundColor: COLORS.pencilLead,
-                                            flexDirection: 'row',
-                                            alignItems: 'center',
-                                            justifyContent: 'center'}}
-                                        >
-                    <Animated.View style={{ ...StyleSheet.absoluteFillObject,
-                                            height: 40,
-                                            zIndex: 200,
-                                            marginLeft: width/2 - (GROUP_CARD_WIDTH/2) - GROUP_CARD_MARGIN,
-                                            opacity,
-                                            transform: [
-                                                { translateX }
-                                            ],
-                                            width: groups.length * ( GROUP_CARD_WIDTH + ( GROUP_CARD_MARGIN * 2 ) ),
-                                            backgroundColor: COLORS.pencilLead,
-                                            flexDirection: 'row',
-                                            alignItems: 'center',
-                                            justifyContent: 'space-around'}}>
-                        { groups.map((item, i) => {
-                            return <View key={i} style={{ marginHorizontal: GROUP_CARD_MARGIN,
-                                                borderWidth: 1,
-                                                width: GROUP_CARD_WIDTH,
-                                                borderColor: COLORS.biscay,
-                                                borderRadius: 8,
-                                                padding: 5,
-                                                justifyContent: 'center',
-                                                alignItems: 'center'}}>
-                                                    <Text
-                                                style={{ 
-                                                    color: COLORS.biscay,
-                                                    marginHorizontal: 10,
-                                                    fontSize: 14,
-                                                    fontWeight: 'bold'
-                                                }}>{ item.title }</Text>
-                                                </View>
-                        }) }
-                    </Animated.View>
-                    </Animated.View>
-                </PanGestureHandler>
+                <GroupsInHeader {...{ groups, opacity }} />
             <View style={styles.container}>
                 <Animated.View style={[styles.header, { height: animHeight }]}>
                         <SharedElement id={listing.id}>

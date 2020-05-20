@@ -11,9 +11,9 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
-      "image": "./assets/ratioCrossWithText.png",
+      "image": "./assets/arch_splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#303952"
+      "backgroundColor": "#636E72"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
