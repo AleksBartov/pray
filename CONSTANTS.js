@@ -14,6 +14,9 @@ export const COLORS = {
     softBlue: '#778beb',
     purpleMountainMajesty: '#786fa6',
     appleValley: '#ea8685',
+    myBlack: '#2d3436',
+    myGray: '#636e72',
+    myWhite: '#dfe6e9',
 }
 
 export const MY_KEY = 'apiKey=sKw_oqVSmdk0cj8XolfkSyap__JKRPLt';

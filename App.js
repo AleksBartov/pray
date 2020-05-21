@@ -4,6 +4,7 @@ import { createSharedElementStackNavigator } from 'react-navigation-shared-eleme
 import SignInScreen from './screens/SignInScreen';
 import HomeScreen from './screens/HomeScreen';
 import CardScreen from './screens/CardScreen';
+import PlayScreen from './screens/PlayScreen';
 
 export const MyContext = React.createContext();
 
@@ -11,7 +12,8 @@ const AppNavigator = createSharedElementStackNavigator(
   {
     SignIn: SignInScreen,
     Home: HomeScreen,
-    Card: CardScreen
+    Card: CardScreen,
+    Play: PlayScreen
   },
   {
     mode: "modal",

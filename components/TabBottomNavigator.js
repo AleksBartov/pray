@@ -5,7 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Transitioning, Transition } from 'react-native-reanimated';
 const { width, height } = Dimensions.get('window')
 
-const TabBottomNavigator = ({ setSettings, setPlay, setAdd }) => {
+const TabBottomNavigator = ({ setSettings, navigation, namesToPray, title, setAdd }) => {
     const [ ready, setReady ] = useState(false);
 
     const ref = useRef();
@@ -41,7 +41,16 @@ const TabBottomNavigator = ({ setSettings, setPlay, setAdd }) => {
             <TouchableOpacity onPress={() => setSettings(true)}>
                 <Ionicons name="ios-settings" size={34} color={COLORS.purpleMountainMajesty} />
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => setPlay(true)}>
+            <TouchableOpacity onPress={
+                        () => navigation
+                            .navigate(
+                                'Play',
+                                { 
+                                    namesToPray,
+                                    title
+                                }
+                            )
+                        }>
                 <Ionicons name="ios-play" size={34} color={COLORS.purpleMountainMajesty} />
             </TouchableOpacity>
             <TouchableOpacity onPress={() => setAdd(true)}>

@@ -5,7 +5,7 @@ import { SharedElement } from 'react-navigation-shared-element';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from 'react-navigation-hooks';
 import Animated, { Value, set, interpolate, Extrapolate, useCode, block, greaterThan, sub } from 'react-native-reanimated'
-import { useValue, onScrollEvent, withTransition, panGestureHandler, withDecay, diffClamp } from 'react-native-redash';
+import { useValue, onScrollEvent, withTransition } from 'react-native-redash';
 import NamesList from '../components/NamesList';
 import { transformName } from '../helpers/transformName';
 import TabBottomNavigator from '../components/TabBottomNavigator';
@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
 })
 
 
-const CardScreen = () => {
+const CardScreen = ({ navigation }) => {
 
     const [ settings, setSettings ] = useState(false);
     const [ play, setPlay ] = useState(false);
@@ -141,7 +141,6 @@ const CardScreen = () => {
                         <Ionicons name="md-search" size={28} color={COLORS.biscay} />
                     </TouchableWithoutFeedback>
                 </View>
-                <GroupsInHeader {...{ groups, opacity }} />
             <View style={styles.container}>
                 <Animated.View style={[styles.header, { height: animHeight }]}>
                         <SharedElement id={listing.id}>
@@ -185,7 +184,7 @@ const CardScreen = () => {
                     keyExtractor={item => item.id} />
             </View>
 
-            <TabBottomNavigator {...{ setSettings, setPlay, setAdd }} />
+            <TabBottomNavigator {...{ setSettings, navigation, namesToPray, title, setAdd }} />
 
             <Modal
               animationType="slide"
@@ -196,7 +195,7 @@ const CardScreen = () => {
             </Modal>
 
             <Modal
-              animationType="slide"
+              animationType="fade"
               transparent={true}
               visible={play}
               >
