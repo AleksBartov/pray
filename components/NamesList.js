@@ -29,7 +29,7 @@ const NamesList = ({ names, y }) => {
                                             other={item.other}
                                             surname={item.surname}
                                             fathername={item.fathername}
-                                            comment={item.comment} />}
+                                            comment={item.comment}/>}
                 renderSectionHeader={({ section: { title } }) => (
                         <SectionHeader {...{ title }} />
                     )}

@@ -11,9 +11,9 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
-      "image": "./assets/arch_splash.png",
+      "image": "./assets/ETALON_SPLASH.png",
       "resizeMode": "contain",
-      "backgroundColor": "#636E72"
+      "backgroundColor": "#2D3436"
     },
     "updates": {
       "fallbackToCacheTimeout": 0

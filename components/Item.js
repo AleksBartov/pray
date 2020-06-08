@@ -26,6 +26,7 @@ export default class Item extends PureComponent {
     constructor(props) {
         super(props)
     }
+
     render() {
         return (
             <View style={styles.personHolder}>
