@@ -1,9 +1,10 @@
-import React from 'react'
-import { View, Text, StyleSheet, Dimensions } from 'react-native'
+import React, { useState, useRef } from 'react'
+import { View, Text, StyleSheet, Dimensions, TextInput, Alert } from 'react-native'
 import { COLORS } from '../../CONSTANTS'
 import { TapGestureHandler, State } from 'react-native-gesture-handler'
 import { onGestureEvent, withTransition, mix } from 'react-native-redash'
-import Animated, { Value, eq, cond, interpolate, Extrapolate, and, neq, block, set, useCode } from 'react-native-reanimated'
+import Animated, { Value, eq, cond, interpolate, Extrapolate, and, neq, block, set, useCode, call } from 'react-native-reanimated'
+import InnerInput from './InnerInput'
 
 const { width } = Dimensions.get('window')
 const basePadding = 30
@@ -27,12 +28,13 @@ const styles = StyleSheet.create({
     }
 })
 
-const TextInput = ({ title }) => {
+const SimpleTextInput = ({ title }) => {
+    const setIsActive = bool => Alert.alert(`done with ${bool}`);
     const state = new Value(State.UNDETERMINED);
     const isActive = new Value(false);
     const opened = new Value(false);
     const gestureHandler = onGestureEvent({ state });
-    const duration = cond(isActive, 250, 250);
+    const duration = cond(isActive, 250, 2500);
     const progress = withTransition(isActive, { duration });
     const translateY = mix(progress, 0, -32);
     const fontSize = interpolate(translateY, {
@@ -49,9 +51,10 @@ const TextInput = ({ title }) => {
         cond(and(eq(state, State.BEGAN), neq(opened, true)),
         [
             set(isActive, true),
-            set(opened, true)
+            set(opened, true),
         ])
     ]), []);
+    
     return (
         <TapGestureHandler {...gestureHandler}>
             <Animated.View style={styles.main}>
@@ -60,7 +63,6 @@ const TextInput = ({ title }) => {
                         fontSize,
                         backgroundColor: COLORS.biscay,
                         paddingHorizontal: 4,
-                        fontWeight: 'bold',
                         opacity,
                         color: COLORS.rosyHightlight,
                         transform:[
@@ -69,9 +71,10 @@ const TextInput = ({ title }) => {
                             }
                         ] }} >{title}</Animated.Text>
                 </View>
+                <InnerInput {...{isActive, setIsActive}} />
             </Animated.View>
         </TapGestureHandler>
     )
 }
 
-export default TextInput
+export default SimpleTextInput

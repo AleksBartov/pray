@@ -11,9 +11,9 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
-      "image": "./assets/ETALON_SPLASH.png",
+      "image": "./assets/candleSplash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#2D3436"
+      "backgroundColor": "#dfe6e9"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
